@@ -1,24 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
 import './App.css';
+import AddItem from './components/AddItem';
+import Items from './components/Items';
+const axios = require('axios');
 
 function App() {
+
+  const INITIAL_STATE = [];
+
+  const [items, setItems] = useState(INITIAL_STATE);
+  const [isRerender, setIsRerender] = useState(true);
+
+  useEffect(() => {
+    axios.get("https://localhost:5001/api/commando").then(response => {
+      setItems(response.data);
+      setIsRerender(false);
+      console.log(items);
+    });
+  }, [isRerender]);
+
+  const handleAddItem = (e, command, description) => {
+    e.preventDefault();
+    const newItem = { command, description };
+    setItems([...items, newItem]);
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="App container">
+      <Items items={items} />
+      <AddItem handleAddItem={handleAddItem} />
     </div>
   );
 }
