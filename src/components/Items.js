@@ -1,13 +1,17 @@
 import React from 'react';
 import Item from './Item';
 
-const Items = ({ items }) => {
-
+const Items = ({ items, handleDeleteItem }) => {
+  console.log(items)
   return (
-    <React.Fragment>
-      { items.length ? items.map(item => <Item item={item} />) : null }
-    </React.Fragment>
-  )
+		<React.Fragment>
+			{items.length
+				? items.map((item, idx) => (
+						<Item key={idx} item={item} handleDeleteItem={handleDeleteItem} />
+				  ))
+				: null}
+		</React.Fragment>
+	);
 }
 
 export default Items

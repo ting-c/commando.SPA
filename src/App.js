@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import AddItem from './components/AddItem';
 import Items from './components/Items';
+import AlertMessage from './components/AlertMessage';
 const axios = require('axios');
 
 function App() {
@@ -9,25 +10,53 @@ function App() {
   const INITIAL_STATE = [];
 
   const [items, setItems] = useState(INITIAL_STATE);
-  const [isRerender, setIsRerender] = useState(true);
+  const [shouldUpdate, setShouldUpdate] = useState(false);
+  const [alertProps, setAlertProps] = useState({isShowing: false});
 
   useEffect(() => {
     axios.get("https://localhost:5001/api/commando").then(response => {
       setItems(response.data);
-      setIsRerender(false);
-      console.log(items);
     });
-  }, [isRerender]);
+    return () => setShouldUpdate(false);
+  }, [shouldUpdate]);
 
-  const handleAddItem = (e, command, description) => {
+  const handleAddItem = async (e, command, description) => {
     e.preventDefault();
-    const newItem = { command, description };
-    setItems([...items, newItem]);
+    const reqBody = { command, description };
+
+    axios.post(`https://localhost:5001/api/commando`, reqBody)
+      .then(response => console.log(response.data))
+      .catch(error => {
+        console.log(error.response.data)
+        setAlertProps({
+          isShowing: true,
+          message: error.response.data,
+          type: "warning"
+        });
+        return;
+      });
+    setShouldUpdate(true);
+  };
+
+  const handleDeleteItem = (id) => {
+    axios.delete(`https://localhost:5001/api/commando/${id}`)
+			.then((response) => console.log(response))
+      .catch(error => {
+        console.log(error.response.data)
+        setAlertProps({
+          isShowing: true,
+          message: error.response.data,
+          type: "warning"
+        });
+        return;
+      });
+    setShouldUpdate(true);
   }
 
   return (
     <div className="App container">
-      <Items items={items} />
+      { alertProps.isShowing ? <AlertMessage {...alertProps}/> : null }
+      <Items items={items} handleDeleteItem={handleDeleteItem} />
       <AddItem handleAddItem={handleAddItem} />
     </div>
   );
