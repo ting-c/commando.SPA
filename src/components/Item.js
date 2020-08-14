@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 const Item = ({ item , handleDeleteItem }) => {
 
@@ -12,7 +12,7 @@ const Item = ({ item , handleDeleteItem }) => {
 			<label className="font-weight-bold">Description :</label>
 			<p>{description}</p>
 
-      <button onClick={() => handleDeleteItem(id)}>Delete</button>
+      <button className="btn btn-light shadow-sm" onClick={() => handleDeleteItem(id)} style={{width: '4rem', fontSize: '0.8rem'}}>Delete</button>
 		</div>
 	);
 };
