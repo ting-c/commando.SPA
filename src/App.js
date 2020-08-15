@@ -3,20 +3,34 @@ import './App.css';
 import AddItem from './components/AddItem';
 import Items from './components/Items';
 import AlertMessage from './components/AlertMessage';
+import SearchBox from './components/SearchBox';
 const axios = require('axios');
 
 function App() {
   const [items, setItems] = useState([]);
+  const [filteredItems, setFilteredItems] = useState([]);
   const [shouldUpdate, setShouldUpdate] = useState(false);
   const [alertProps, setAlertProps] = useState({isShowing: false});
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     axios.get("https://localhost:5001/api/commando").then(response => {
       setItems(response.data);
+      setFilteredItems(response.data);
       console.log(response.data);
     });
     return () => setShouldUpdate(false);
   }, [shouldUpdate]);
+
+  useEffect(() => {
+    if (searchTerm.length) {
+      const filteredItems = items.filter(
+        item =>
+          (item.command.search(searchTerm) !== -1) || (item.description.search(searchTerm) !== -1)
+        );
+      setFilteredItems(filteredItems);
+    }
+  }, [searchTerm])
 
   const handleAddItem = async (e, command, description) => {
     e.preventDefault();
@@ -61,8 +75,9 @@ function App() {
   return (
 		<div className="App container">
 			{alertProps.isShowing ? <AlertMessage {...alertProps} /> : null}
+      <SearchBox searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 			<Items
-				items={items}
+				items={filteredItems}
 				handleDeleteItem={handleDeleteItem}
 				handleUpdateItem={handleUpdateItem}
 			/>
