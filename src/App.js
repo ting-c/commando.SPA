@@ -6,16 +6,14 @@ import AlertMessage from './components/AlertMessage';
 const axios = require('axios');
 
 function App() {
-
-  const INITIAL_STATE = [];
-
-  const [items, setItems] = useState(INITIAL_STATE);
+  const [items, setItems] = useState([]);
   const [shouldUpdate, setShouldUpdate] = useState(false);
   const [alertProps, setAlertProps] = useState({isShowing: false});
 
   useEffect(() => {
     axios.get("https://localhost:5001/api/commando").then(response => {
       setItems(response.data);
+      console.log(response.data);
     });
     return () => setShouldUpdate(false);
   }, [shouldUpdate]);
@@ -25,41 +23,52 @@ function App() {
     const reqBody = { command, description };
 
     axios.post(`https://localhost:5001/api/commando`, reqBody)
-      .then(response => console.log(response.data))
+      .then(() => setShouldUpdate(true))
       .catch(error => {
-        console.log(error.response.data)
         setAlertProps({
           isShowing: true,
           message: error.response.data,
           type: "warning"
         });
-        return;
       });
-    setShouldUpdate(true);
-  };
+  }
 
   const handleDeleteItem = (id) => {
     axios.delete(`https://localhost:5001/api/commando/${id}`)
-			.then((response) => console.log(response))
+			.then(() => setShouldUpdate(true))
       .catch(error => {
-        console.log(error.response.data)
         setAlertProps({
           isShowing: true,
           message: error.response.data,
           type: "warning"
         });
-        return;
       });
-    setShouldUpdate(true);
+  }
+
+  const handleUpdateItem = (id, command, description) => {
+    const reqBody = { command, description };
+    axios.put(`https://localhost:5001/api/commando/${id}`, reqBody)
+			.then(() => setShouldUpdate(true))
+			.catch((error) => {
+				setAlertProps({
+					isShowing: true,
+					message: error.response.data,
+					type: "warning",
+				});
+			});
   }
 
   return (
-    <div className="App container">
-      { alertProps.isShowing ? <AlertMessage {...alertProps}/> : null }
-      <Items items={items} handleDeleteItem={handleDeleteItem} />
-      <AddItem handleAddItem={handleAddItem} />
-    </div>
-  );
+		<div className="App container">
+			{alertProps.isShowing ? <AlertMessage {...alertProps} /> : null}
+			<Items
+				items={items}
+				handleDeleteItem={handleDeleteItem}
+				handleUpdateItem={handleUpdateItem}
+			/>
+			<AddItem handleAddItem={handleAddItem} />
+		</div>
+	);
 }
 
 export default App;
