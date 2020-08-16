@@ -23,13 +23,11 @@ function App() {
   }, [shouldUpdate]);
 
   useEffect(() => {
-    if (searchTerm.length) {
-      const filteredItems = items.filter(
-        item =>
-          (item.command.search(searchTerm) !== -1) || (item.description.search(searchTerm) !== -1)
-        );
-      setFilteredItems(filteredItems);
-    }
+    const filteredItems = items.filter(
+      item =>
+        (item.command.search(searchTerm) !== -1) || (item.description.search(searchTerm) !== -1)
+      );
+    setFilteredItems(filteredItems);
   }, [searchTerm])
 
   const handleAddItem = async (e, command, description) => {
