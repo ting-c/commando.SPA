@@ -76,20 +76,22 @@ const ButtonFetch = ({ handleClick }) => (
 
 const ButtonFetchEnhance = enhanceFetch(ButtonFetch);
 
-const Home = () => (
-	<div>
-		<h1>Home</h1>
-		<p>Unprotected home page</p>
-		<p>
-			<Button403Enhance />
-		</p>
-		<p>
-			<Button401Enhance />
-		</p>
-		<p>
-			<ButtonFetchEnhance />
-		</p>
-	</div>
-);
+const Home = () => {	
+	return (
+		<div>
+			<h1>Home</h1>
+			<p>Unprotected home page</p>
+			<p>
+				<Button403Enhance />
+			</p>
+			<p>
+				<Button401Enhance />
+			</p>
+			<p>
+				<ButtonFetchEnhance />
+			</p>
+		</div>
+	);
+}
 
 export default Home;

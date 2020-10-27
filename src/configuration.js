@@ -1,16 +1,15 @@
 const configuration = {
-	// client_id: "commandospa",
-	client_id: "interactive.public.short",
-	redirect_uri: "http://localhost:3000/authentication/callback",
+	client_id: "commandospa",
+	client_secret: "secret",
+	redirect_uri: "http://localhost:3000/home",
 	response_type: "code",
-	post_logout_redirect_uri: "http://localhost:3000/",
-	// scope: "openid profile email commandoapi offline_access",
-	scope: "openid profile email api offline_access",
-	// authority: "https://localhost:5001",
-	authority: "https://demo.identityserver.io",
-	silent_redirect_uri: "http://localhost:3000/authentication/silent_callback",
+	post_logout_redirect_uri: "http://localhost:3000",
+	scope: "openid profile commandoapi offline_access",
+	authority: "https://localhost:5001",
+	silent_redirect_uri: "http://localhost:3000/admin",
 	automaticSilentRenew: true,
 	loadUserInfo: true,
+	saveTokens: true,
 };
 
 export default configuration;

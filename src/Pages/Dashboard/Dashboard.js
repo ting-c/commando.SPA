@@ -15,6 +15,7 @@ const Dashboard = () => {
 
 	const { oidcUser, logout, events } = useReactOidc();
 	const { profile } = oidcUser;
+
 	const addUserEvent = (user) =>
 		console.log(`********* User Loaded :${user.profile} *********`);
 
@@ -24,15 +25,19 @@ const Dashboard = () => {
 			events.removeUserLoaded(addUserEvent);
 		};
 	});
-
+	
 	React.useEffect(() => {
+		if (oidcUser) {
+			axios.defaults.headers.common["Authorization"] = "Bearer " + oidcUser.access_token;
+		};
 		axios.get("https://localhost:6001/api/commando").then((response) => {
 			setItems(response.data);
 			setFilteredItems(response.data);
 			console.log(response.data);
-		});
+		}).catch(error => console.log(error));	
+
 		return () => setShouldUpdate(false);
-	}, [shouldUpdate]);
+	}, [shouldUpdate, oidcUser]);
 
 	React.useEffect(() => {
 		const filteredItems = items.filter(
@@ -43,7 +48,7 @@ const Dashboard = () => {
 		setFilteredItems(filteredItems);
 	}, [searchTerm, items]);
 
-	const handleAddItem = async (e, command, description) => {
+	const handleAddItem = (e, command, description) => {
 		e.preventDefault();
 		const reqBody = { command, description };
 		axios
@@ -85,8 +90,6 @@ const Dashboard = () => {
 			});
 	};
 
-	
-
 	return (
 		<div>
 			<h1>Dashboard</h1>
@@ -96,7 +99,6 @@ const Dashboard = () => {
 					Hello {profile.given_name} {profile.family_name}
 				</span>
 			</p>
-			{alertProps.isShowing ? <AlertMessage {...alertProps} /> : null}
 			<SearchBox searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 			<Items
 				items={filteredItems}
@@ -105,6 +107,7 @@ const Dashboard = () => {
 			/>
 			<AddItem handleAddItem={handleAddItem} />
 			<button onClick={logout}>logout</button>
+			{alertProps.isShowing ? <AlertMessage {...alertProps} /> : null}
 		</div>
 	);
 };

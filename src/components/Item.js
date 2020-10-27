@@ -6,10 +6,16 @@ const Item = ({ item , handleDeleteItem, handleUpdateItem }) => {
 	const [command, setCommand] = useState(item.command);
 	const [description, setDescription] = useState(item.description);
 
+	const updateItem = (e, item, command, description) => {
+		e.preventDefault();
+		handleUpdateItem(item.id, command, description);
+		setIsInEditMode(false);
+	};
+
 	return (
 		<div className="row mb-2 py-2 d-flex flex-column text-left border-bottom">
 			{isInEditMode ? (
-				<form onSubmit={() => handleUpdateItem(item.id, command, description)}>
+				<form onSubmit={(e) => updateItem(e, item, command, description)}>
 					<label className="font-weight-bold">Command :</label>
 					<input
 						className="form-control bg-dark text-white px-2 rounded"

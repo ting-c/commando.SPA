@@ -13,7 +13,9 @@ const AddItem = ({ handleAddItem }) => {
 	};
 
   return (
-		<form className="row py-2 d-flex flex-column justify-content-center">
+		<form 
+			className="row py-2 d-flex flex-column justify-content-center" 
+			onSubmit={(e) => addItem(e, command, description)}>
 			<input
 				className="mb-2 bg-dark text-white form-control"
 				placeholder="Enter command"
@@ -30,7 +32,7 @@ const AddItem = ({ handleAddItem }) => {
 			/>
 			<button
 				className="btn btn-light"
-				onClick={(e) => addItem(e, command, description)}
+				type="submit"
 			>
 				Add Command
 			</button>
