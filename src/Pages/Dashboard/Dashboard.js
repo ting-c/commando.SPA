@@ -33,7 +33,6 @@ const Dashboard = () => {
 		axios.get("https://localhost:6001/api/commando").then((response) => {
 			setItems(response.data);
 			setFilteredItems(response.data);
-			console.log(response.data);
 		}).catch(error => console.log(error));	
 
 		return () => setShouldUpdate(false);
@@ -93,7 +92,6 @@ const Dashboard = () => {
 	return (
 		<div>
 			<h1>Dashboard</h1>
-			<p>Protected Dashboard</p>
 			<p>
 				<span>
 					Hello {profile.given_name} {profile.family_name}

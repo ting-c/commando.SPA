@@ -11,7 +11,6 @@ const headerStyle = {
 
 const linkStyle = {
 	color: "white",
-	textDecoration: "underline",
 };
 
 export default () => (
@@ -22,7 +21,7 @@ export default () => (
 					<div style={headerStyle}>
 						<h3>
 							<Link style={linkStyle} to="/">
-								HOME
+								Commando
 							</Link>
 						</h3>
 
@@ -33,25 +32,20 @@ export default () => (
 										Dashboard
 									</Link>
 								</li>
-								<li>
-									<Link style={linkStyle} to="/admin">
-										Admin
-									</Link>
-								</li>
-								<li>
-									<Link style={linkStyle} to="/protected1">
-										Direct Protected
-									</Link>
-								</li>
-								<li>
-									<Link style={linkStyle} to="/protected2">
-										HOC Protected
-									</Link>
-								</li>
-								<button onClick={props.logout}>logout</button>
+								<button
+									className="btn btn-light my-2"
+									onClick={props.logout}
+								>
+									logout
+								</button>
 							</ul>
 						) : (
-							<button onClick={props.login}>login</button>
+							<button
+								className="btn btn-light my-2"
+								onClick={props.login}
+							>
+								login
+							</button>
 						)}
 					</div>
 				);
